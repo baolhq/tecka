@@ -8,11 +8,16 @@
 	let content = '';
 
 	onMount(async () => {
-		let response = await fetch('/blogs.json');
-		let data = await response.json();
+		// Fetch blog list to get metadata
+		let jsonRes = await fetch(`/blogs.json`);
+		let jsonData = await jsonRes.json();
 
-		title = data[slug].title;
-		content = marked.parse(data[slug].content);
+		title = jsonData[slug].title;
+
+		// Fetch content base on slug and blog list
+		let mdRes = await fetch(`/blogs/${slug}.md`);
+		let mdData = await mdRes.text();
+		content = marked.parse(mdData);
 	});
 </script>
 
@@ -21,12 +26,17 @@
 </svelte:head>
 
 <h1 id="title">{title}</h1>
-{@html content}
+<div class="container">
+	{@html content}
+</div>
 
 <style>
 	#title {
 		font-family: 'Lora', serif;
 		font-size: 2.5em;
+	}
+	.container {
+		margin-top: 2.5rem;
 	}
 
 	:global(img) {
@@ -47,6 +57,7 @@
 		background: var(--surface);
 		padding: 10px 16px;
 		border-radius: 8px;
+		overflow-x: scroll;
 	}
 	:global(code) {
 		background: var(--surface);
@@ -63,5 +74,15 @@
 	}
 	:global(th) {
 		text-align: center;
+	}
+	:global(input, button) {
+		background: transparent;
+		font-size: 1em;
+		border: 1px solid var(--surface);
+		color: var(--fg);
+		padding: 8px;
+	}
+	:global(button:hover, input[type='submit']) {
+		cursor: pointer;
 	}
 </style>

@@ -17,7 +17,6 @@
 	onMount(() => {
 		isMobile.set(detectMobile());
 		getTheme();
-		console.log($theme);
 		document.documentElement.setAttribute('data-theme', $theme);
 	});
 
