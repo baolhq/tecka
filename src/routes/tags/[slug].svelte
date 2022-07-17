@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 
 	let blogList = [];
+	let tag = $page.params.slug;
 
 	// Fetch data to array
 	onMount(async () => {
@@ -16,7 +17,6 @@
 			Object.assign(blogList[i], { slug: keyList[i] });
 		}
 
-		let tag = $page.url.searchParams.get('tag');
 		blogList = filterByTag(tag, blogList);
 	});
 
@@ -44,7 +44,7 @@
 </script>
 
 <svelte:head>
-	<title>Tecka</title>
+	<title>Tagged with "{tag}" - Tecka</title>
 </svelte:head>
 
 {#each blogList as blog}

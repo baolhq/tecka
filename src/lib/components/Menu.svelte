@@ -23,13 +23,16 @@
 		<a href="/" transition:fade={{ duration: 200 }}>
 			<ion-icon name="home-outline" />
 		</a>
-		<a href={$page.url} transition:fade={{ duration: 400 }}>
+		<a href={$page.url} transition:fade={{ duration: 300 }}>
 			<ion-icon name="chevron-up-outline" />
 		</a>
-		<button on:click={toggleDarkMode} transition:fade={{ duration: 600 }}>
+		<a href="/tags" transition:fade={{ duration: 400 }}>
+			<ion-icon name="pricetag-outline" />
+		</a>
+		<button on:click={toggleDarkMode} transition:fade={{ duration: 500 }}>
 			<ion-icon name={$theme === 'light' ? 'partly-sunny-outline' : 'moon-outline'} />
 		</button>
-		<a href="/about" transition:fade={{ duration: 800 }}>
+		<a href="/about" transition:fade={{ duration: 600 }}>
 			<ion-icon name="help-outline" />
 		</a>
 	</div>
