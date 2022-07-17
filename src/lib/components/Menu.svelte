@@ -2,13 +2,16 @@
 	import { isMenuOpen, isMobile, theme } from '../../store.js';
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
-	const openMenu = () => {
-		isMenuOpen.set(true);
-	};
+	onMount(() => {
+		if (window.innerWidth <= 500) {
+			isMobile.set(true);
+		}
+	});
 
-	const closeMenu = () => {
-		isMenuOpen.set(false);
+	const setMenuOpen = (open) => {
+		isMenuOpen.set(open);
 	};
 
 	const toggleDarkMode = () => {
@@ -19,7 +22,12 @@
 </script>
 
 {#if $isMenuOpen || $isMobile}
-	<div class="menu" on:mouseenter={openMenu} on:mouseleave={closeMenu}>
+	<div
+		class="menu"
+		on:mouseenter={() => setMenuOpen(true)}
+		on:mouseleave={() => setMenuOpen()}
+		on:click={() => setMenuOpen(true)}
+	>
 		<a href="/" transition:fade={{ duration: 200 }}>
 			<ion-icon name="home-outline" />
 		</a>
@@ -64,5 +72,11 @@
 		color: var(--fg);
 		font-size: 1.5em;
 		pointer-events: none;
+	}
+	@media screen and (max-width: 500px) {
+		.menu {
+			top: 0;
+			left: 12px;
+		}
 	}
 </style>

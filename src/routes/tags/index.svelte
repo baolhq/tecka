@@ -1,21 +1,23 @@
 <script>
-	import { onMount } from 'svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
 
-	let tagList = [];
-
-	onMount(async () => {
+	// Fetch tag list from blog.json and return array of tags
+	const fetchTagList = async () => {
 		let response = await fetch('/blogs.json');
 		let data = await response.json();
 		let blogList = Object.values(data);
+		let result = [];
 
-		tagList = [];
 		blogList.forEach((blog) => {
 			blog.tags.forEach((tag) => {
-				if (!tagList.includes(tag)) tagList = [...tagList, tag];
+				// Only add non-existing tag
+				if (!result.includes(tag)) result = [...result, tag];
 			});
 		});
-	});
+		return result;
+	};
 
+	// Randomize font size of this elem
 	const onload = (elem) => {
 		let rand = (Math.random() * -0.5 + 1.5).toFixed(2);
 		elem.style.fontSize = `${rand}em`;
@@ -27,9 +29,13 @@
 </svelte:head>
 
 <div class="container">
-	{#each tagList as tag}
-		<a use:onload href="/tags/{tag}">#{tag}</a>
-	{/each}
+	{#await fetchTagList()}
+		<Spinner />
+	{:then result}
+		{#each result as tag}
+			<a use:onload href="/tags/{tag}">#{tag}</a>
+		{/each}
+	{/await}
 </div>
 
 <style>

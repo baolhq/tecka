@@ -2,26 +2,25 @@
 	import { page } from '$app/stores';
 	import { marked } from 'marked';
 	import { onMount } from 'svelte';
-	import { blogsMetadata, blogList } from '../../store.js';
+	import { fade } from 'svelte/transition';
+	import { blogList } from '../../store.js';
+	import Spinner from '$lib/components/Spinner.svelte';
 
 	let slug = $page.params.slug;
 	let title = '';
-	let content = '';
 
 	onMount(async () => {
-		// If blogs metadata is not loaded, load 'em
-		if (Object.keys($blogsMetadata).length === 0) {
-			let jsonRes = await fetch(`/blogs.json`);
-			blogsMetadata.set(await jsonRes.json());
-		}
+		let res = await fetch(`/blogs.json`);
+    let data = await res.json()
 
-		title = $blogsMetadata[slug].title;
-
-		// Fetch content base on slug and blog list
-		let mdRes = await fetch(`/blogs/${slug}.md`);
-		let mdData = await mdRes.text();
-		content = marked.parse(mdData);
+		title = data[slug].title;
 	});
+
+	// Fetch content base on slug and blog list
+	const fetchContent = async () => {
+		let mdRes = await fetch(`/blogs/${slug}.md`);
+		return await mdRes.text();
+	};
 </script>
 
 <svelte:head>
@@ -30,7 +29,13 @@
 
 <h1 id="title">{title}</h1>
 <div class="container">
-	{@html content}
+	{#await fetchContent()}
+		<Spinner />
+	{:then result}
+		<div in:fade={{ duration: 400 }}>
+			{@html marked.parse(result)}
+		</div>
+	{/await}
 </div>
 
 <style>
@@ -40,6 +45,7 @@
 	}
 	.container {
 		margin-top: 2.5rem;
+		min-height: 100%;
 	}
 
 	:global(img) {
@@ -59,7 +65,7 @@
 	:global(pre) {
 		background: var(--surface);
 		padding: 10px 16px;
-		border-radius: 8px;
+		border-radius: 12px;
 		overflow-x: scroll;
 	}
 	:global(code) {

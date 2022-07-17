@@ -1,33 +1,34 @@
 <script context="module">
+	// For page transition
 	export const load = async ({ url: { pathname } }) => ({
 		props: { pathname }
 	});
 </script>
 
 <script>
-	import MenuIcon from '../lib/components/MenuIcon.svelte';
-	import Menu from '../lib/components/Menu.svelte';
-	import PageTransition from '../lib/components/PageTransition.svelte';
-	import { isMenuOpen, isMobile, theme, blogsMetadata, blogList } from '../store.js';
+	import MenuIcon from '$lib/components/MenuIcon.svelte';
+	import Menu from '$lib/components/Menu.svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
+	import PageTransition from '$lib/components/PageTransition.svelte';
+	import { isMobile, theme, blogList } from '../store.js';
 	import { onMount } from 'svelte';
 
 	export let pathname;
 
-	onMount(async () => {
-		isMobile.set(detectMobile());
+	onMount(() => {
 		getTheme();
 		document.documentElement.setAttribute('data-theme', $theme);
 
-		await fetchData();
+		isMobile.set(detectMobile());
 	});
 
-	// Fetch blogs and their metadata
+	// Fetch blogs metadata from blogs.json
 	const fetchData = async () => {
 		let response = await fetch('/blogs.json');
 		let data = await response.json();
-		blogsMetadata.set(data);
 		blogList.set(Object.values(data));
 
+		// Add slug to blog metadata
 		let keyList = Object.keys(data);
 		for (let i = 0; i < keyList.length; i++) {
 			Object.assign($blogList[i], { slug: keyList[i] });
@@ -46,7 +47,7 @@
 		];
 
 		return toMatch.some((toMatchItem) => {
-			return navigator.userAgent.match(toMatchItem);
+			return navigator.userAgent.match(toMatchItem) || window.innerWidth <= 500;
 		});
 	};
 
@@ -69,15 +70,24 @@
 <Menu />
 
 <main>
-	<PageTransition {pathname}>
-		<slot />
-	</PageTransition>
+	{#await fetchData()}
+		<Spinner />
+	{:then}
+		<PageTransition {pathname}>
+			<slot />
+		</PageTransition>
+	{/await}
 </main>
 
 <style>
 	main {
-		width: 60%;
+		width: 50%;
 		margin: auto;
 		margin-top: 3rem;
+	}
+	@media screen and (max-width: 500px) {
+		main {
+			width: 65%;
+		}
 	}
 </style>

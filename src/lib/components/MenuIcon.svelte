@@ -1,22 +1,16 @@
 <script>
 	import { isMenuOpen } from '../../store.js';
 
-	const closeMenu = () => {
-		isMenuOpen.set(false);
-	};
-
-	const openMenu = () => {
-		isMenuOpen.set(true);
+	const setMenuOpen = (open) => {
+		isMenuOpen.set(open);
 	};
 </script>
 
-<!-- Click anywhere to close menu -->
-<svelte:window on:click={closeMenu} />
-
 <button
 	class="menu-icon {$isMenuOpen ? 'opened' : ''}"
-	on:mouseenter={openMenu}
-	on:mouseleave={closeMenu}
+	on:mouseenter={() => setMenuOpen(true)}
+	on:mouseleave={() => setMenuOpen()}
+	on:click={() => setMenuOpen()}
 >
 	<svg width="100" height="100" viewBox="0 0 100 100">
 		<path
@@ -76,5 +70,10 @@
 		stroke-dasharray: 90 207;
 		stroke-dashoffset: -134;
 		stroke-width: 6;
+	}
+	@media screen and (max-width: 500px) {
+		.menu-icon {
+			display: none;
+		}
 	}
 </style>
