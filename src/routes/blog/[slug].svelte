@@ -2,17 +2,20 @@
 	import { page } from '$app/stores';
 	import { marked } from 'marked';
 	import { onMount } from 'svelte';
+	import { blogsMetadata, blogList } from '../../store.js';
 
 	let slug = $page.params.slug;
 	let title = '';
 	let content = '';
 
 	onMount(async () => {
-		// Fetch blog list to get metadata
-		let jsonRes = await fetch(`/blogs.json`);
-		let jsonData = await jsonRes.json();
+		// If blogs metadata is not loaded, load 'em
+		if (Object.keys($blogsMetadata).length === 0) {
+			let jsonRes = await fetch(`/blogs.json`);
+			blogsMetadata.set(await jsonRes.json());
+		}
 
-		title = jsonData[slug].title;
+		title = $blogsMetadata[slug].title;
 
 		// Fetch content base on slug and blog list
 		let mdRes = await fetch(`/blogs/${slug}.md`);

@@ -8,8 +8,11 @@
 		let data = await response.json();
 		let blogList = Object.values(data);
 
+		tagList = [];
 		blogList.forEach((blog) => {
-			tagList = tagList.concat(blog.tags);
+			blog.tags.forEach((tag) => {
+				if (!tagList.includes(tag)) tagList = [...tagList, tag];
+			});
 		});
 	});
 

@@ -2,23 +2,28 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { blogList } from '../../store.js';
 
-	let blogList = [];
+	let blogs = [];
 	let tag = $page.params.slug;
 
-	// Fetch data to array
 	onMount(async () => {
+		// If blog list is empty fetch from db
+		if ($blogList.length === 0) await fetchData();
+
+		blogs = filterByTag(tag, $blogList);
+	});
+
+	const fetchData = async () => {
 		let response = await fetch('/blogs.json');
 		let data = await response.json();
-		blogList = Object.values(data);
+		blogList.set(Object.values(data));
 
 		let keyList = Object.keys(data);
 		for (let i = 0; i < keyList.length; i++) {
-			Object.assign(blogList[i], { slug: keyList[i] });
+			Object.assign($blogList[i], { slug: keyList[i] });
 		}
-
-		blogList = filterByTag(tag, blogList);
-	});
+	};
 
 	// Filter blogs by tag
 	const filterByTag = (tagFilter, blogs) => {
@@ -47,7 +52,7 @@
 	<title>Tagged with "{tag}" - Tecka</title>
 </svelte:head>
 
-{#each blogList as blog}
+{#each blogs as blog}
 	<a href="/blog/{blog.slug}" in:fade={{ duration: 400 }}># {blog.title}</a>
 	<br />
 {/each}

@@ -8,17 +8,31 @@
 	import MenuIcon from '../lib/components/MenuIcon.svelte';
 	import Menu from '../lib/components/Menu.svelte';
 	import PageTransition from '../lib/components/PageTransition.svelte';
-	import { isMenuOpen, isMobile, theme } from '../store.js';
+	import { isMenuOpen, isMobile, theme, blogsMetadata, blogList } from '../store.js';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 
 	export let pathname;
 
-	onMount(() => {
+	onMount(async () => {
 		isMobile.set(detectMobile());
 		getTheme();
 		document.documentElement.setAttribute('data-theme', $theme);
+
+		await fetchData();
 	});
+
+	// Fetch blogs and their metadata
+	const fetchData = async () => {
+		let response = await fetch('/blogs.json');
+		let data = await response.json();
+		blogsMetadata.set(data);
+		blogList.set(Object.values(data));
+
+		let keyList = Object.keys(data);
+		for (let i = 0; i < keyList.length; i++) {
+			Object.assign($blogList[i], { slug: keyList[i] });
+		}
+	};
 
 	const detectMobile = () => {
 		const toMatch = [
