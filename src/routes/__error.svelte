@@ -1,4 +1,5 @@
 <script context="module">
+	// Get error status and message from props
 	export function load({ error, status }) {
 		return {
 			props: {
