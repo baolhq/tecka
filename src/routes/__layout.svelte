@@ -83,7 +83,7 @@
 	main {
 		width: 50%;
 		margin: auto;
-		margin-top: 3rem;
+		margin-top: 2rem;
 	}
 	@media screen and (max-width: 500px) {
 		main {

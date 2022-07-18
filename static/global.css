@@ -5,13 +5,15 @@
 	--bg: #1e1e2e;
 	--surface: #45475a;
 	--link: #89b4fa;
+	--card-bg: rgba(49, 50, 68, 0.5);
 }
 
 :root[data-theme='light'] {
 	--fg: #181825;
 	--bg: #cdd6f4;
 	--surface: #bac2de;
-	--link: #f38ba8;
+	--link: #1e66f5;
+	--card-bg: rgba(186, 194, 222, 0.5);
 }
 
 html {
