@@ -1,7 +1,6 @@
 <script>
 	import { isMenuOpen, isMobile, theme } from '../../store.js';
 	import { fade } from 'svelte/transition';
-	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
@@ -22,18 +21,13 @@
 </script>
 
 {#if $isMenuOpen || $isMobile}
-	<div
-		class="menu"
-		on:mouseenter={() => setMenuOpen(true)}
-		on:mouseleave={() => setMenuOpen()}
-		on:click={() => setMenuOpen(true)}
-	>
+	<div class="menu" on:mouseenter={() => setMenuOpen(true)} on:mouseleave={() => setMenuOpen()}>
 		<a href="/" transition:fade={{ duration: 200 }}>
 			<ion-icon name="home-outline" />
 		</a>
-		<a href={$page.url} transition:fade={{ duration: 300 }}>
+		<button on:click={() => window.scrollTo(0, 0)} transition:fade={{ duration: 300 }}>
 			<ion-icon name="chevron-up-outline" />
-		</a>
+		</button>
 		<a href="/tags" transition:fade={{ duration: 400 }}>
 			<ion-icon name="pricetag-outline" />
 		</a>
