@@ -35,6 +35,7 @@
 		}
 	};
 
+	// Detect if user is on mobile by navigator or screen width is below 500
 	const detectMobile = () => {
 		const toMatch = [
 			/Android/i,

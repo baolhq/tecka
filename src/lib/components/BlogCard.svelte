@@ -24,7 +24,6 @@
 		-webkit-backdrop-filter: blur(20px);
 		background: var(--card-bg);
 	}
-
 	a:hover {
 		color: var(--link);
 	}
@@ -33,7 +32,6 @@
 		display: block;
 		padding-left: 14px;
 		width: 100%;
-		height: 100%;
 		transition: border 0.4s ease;
 	}
 	span:hover {
