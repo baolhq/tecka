@@ -11,7 +11,7 @@
 
 	onMount(async () => {
 		let res = await fetch(`/blogs.json`);
-    let data = await res.json()
+		let data = await res.json();
 
 		title = data[slug].title;
 	});
@@ -56,6 +56,9 @@
 		text-decoration: none;
 		transition: color 0.4s ease;
 		color: var(--link);
+	}
+	:global(a:hover) {
+		text-decoration: underline;
 	}
 	:global(hr) {
 		background: var(--surface);

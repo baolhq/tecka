@@ -24,7 +24,8 @@
 		-webkit-backdrop-filter: blur(20px);
 		background: var(--card-bg);
 	}
-	a:hover {
+	a:hover,
+	a:focus {
 		color: var(--link);
 	}
 	span {
@@ -34,7 +35,8 @@
 		width: 100%;
 		transition: border 0.4s ease;
 	}
-	span:hover {
+	span:hover,
+	a:focus span {
 		border-left: 4px solid var(--link);
 	}
 </style>

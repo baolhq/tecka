@@ -1,5 +1,11 @@
 <script>
 	import Spinner from '$lib/components/Spinner.svelte';
+	import { onMount } from 'svelte';
+
+	let tagList = [];
+	onMount(async () => {
+		tagList = await fetchTagList();
+	});
 
 	// Fetch tag list from blog.json and return array of tags
 	const fetchTagList = async () => {
@@ -29,13 +35,9 @@
 </svelte:head>
 
 <div class="container">
-	{#await fetchTagList()}
-		<Spinner />
-	{:then result}
-		{#each result as tag}
-			<a use:onload href="/tags/{tag}">#{tag}</a>
-		{/each}
-	{/await}
+	{#each tagList as tag}
+		<a use:onload href="/tags/{tag}">#{tag}</a>
+	{/each}
 </div>
 
 <style>
