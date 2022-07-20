@@ -1,5 +1,4 @@
 <script>
-	import Spinner from '$lib/components/Spinner.svelte';
 	import { onMount } from 'svelte';
 
 	let tagList = [];
@@ -23,10 +22,9 @@
 		return result;
 	};
 
-	// Randomize font size of this elem
-	const onload = (elem) => {
-		let rand = (Math.random() * -0.5 + 1.5).toFixed(2);
-		elem.style.fontSize = `${rand}em`;
+	const randomizeFontSize = (elem) => {
+		let fontSize = Math.floor(Math.random() * (20 - 10 + 1)) + 15;
+		elem.style.fontSize = `${fontSize}px`;
 	};
 </script>
 
@@ -36,7 +34,7 @@
 
 <div class="container">
 	{#each tagList as tag}
-		<a use:onload href="/tags/{tag}">#{tag}</a>
+		<a use:randomizeFontSize href="/tags/{tag}">#{tag}</a>
 	{/each}
 </div>
 
